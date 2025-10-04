@@ -1,0 +1,26 @@
+{
+  "name": "jangid-platform",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Yellow pages portal with wildcard subdomains, admin dashboards, and Vue 3 frontend",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run start:dev --workspace @jangid/api\" \"npm run dev --workspace @jangid/web\"",
+    "dev:api": "npm run start:dev --workspace @jangid/api",
+    "dev:web": "npm run dev --workspace @jangid/web",
+    "build": "npm run build --workspace @jangid/shared && npm run build --workspace @jangid/api && npm run build --workspace @jangid/web",
+    "lint": "npm run lint --workspace @jangid/api && npm run lint --workspace @jangid/web",
+    "typecheck": "npm run typecheck --workspace @jangid/api && npm run typecheck --workspace @jangid/web",
+    "db:generate": "npm run prisma:generate --workspace @jangid/api",
+    "db:migrate": "npm run prisma:migrate --workspace @jangid/api",
+    "postinstall": "npm run db:generate"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.0"
+  }
+}

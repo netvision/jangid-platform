@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "types": ["node", "nuxt"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "#imports": ["./.nuxt/types/imports"],
+      "@jangid/shared": ["../../packages/shared/src"]
+    }
+  },
+  "include": [
+    "nuxt.config.ts",
+    "app.vue",
+    "components/**/*.vue",
+    "layouts/**/*.vue",
+    "pages/**/*.vue",
+    "stores/**/*.ts",
+    "middleware/**/*.ts",
+    "server/**/*.ts",
+    "utils/**/*.ts",
+    "composables/**/*.ts",
+    "plugins/**/*.ts",
+    ".nuxt/types/**/*.d.ts",
+    ".nuxt/**/*.ts",
+    "types/**/*.d.ts"
+  ]
+}

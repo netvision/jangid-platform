@@ -1,0 +1,39 @@
+{
+  "name": "@jangid/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "lint": "eslint \"{app,components,layouts,pages,plugins,server}/**/*.{ts,vue}\"",
+  "typecheck": "nuxi typecheck"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.22",
+  "@jangid/shared": "file:../../packages/shared",
+    "@heroicons/vue": "^2.1.5",
+    "@nuxtjs/color-mode": "^3.4.2",
+    "@nuxtjs/tailwindcss": "^6.10.4",
+    "@pinia/nuxt": "^0.5.1",
+    "axios": "^1.7.2",
+    "nuxt": "^3.12.0",
+    "nuxt-icon": "^0.6.1",
+  "ofetch": "^1.3.4",
+    "pinia": "^2.1.7",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.0",
+    "vue-tsc": "^2.0.21"
+  }
+}
