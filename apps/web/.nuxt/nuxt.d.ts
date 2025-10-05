@@ -1,6 +1,6 @@
 /// <reference types="@pinia/nuxt" />
-/// <reference types="@nuxtjs/color-mode" />
 /// <reference types="nuxt-icon" />
+/// <reference types="@nuxtjs/color-mode" />
 /// <reference types="@nuxt/devtools" />
 /// <reference types="@nuxt/telemetry" />
 /// <reference path="types/builder-env.d.ts" />

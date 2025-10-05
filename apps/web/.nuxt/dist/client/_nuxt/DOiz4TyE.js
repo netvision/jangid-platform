@@ -1,0 +1,1 @@
+import{Y as n,j as o,Z as u,a0 as c}from"#entry";const i=n(async t=>{let r,a;const e=o();if(!e.accessToken||!e.refreshToken)return u({path:"/auth/login",query:{redirect:t.fullPath}});if(!e.user)try{[r,a]=c(()=>e.fetchCurrentUser()),await r,a()}catch(s){return console.warn("failed to fetch user",s),u({path:"/auth/login",query:{redirect:t.fullPath}})}});export{i as default};

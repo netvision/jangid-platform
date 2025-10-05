@@ -1,0 +1,134 @@
+# Linode Nanode Setup Guide
+
+These steps prepare an Ubuntu 22.04 Nanode for hosting the Jangid platform (NestJS API + Nuxt web app).
+
+## 1. Connect and update
+1. SSH into the server using the IP Linode assigned.
+   - `ssh root@<linode-ip>`
+2. Update the base system and install utilities.
+   - `sudo apt update && sudo apt upgrade -y`
+   - `sudo apt install -y build-essential curl git ufw`
+
+## 2. Create a deploy user
+1. Add a non-root user to run the application.
+   - `sudo adduser deploy`
+   - `sudo usermod -aG sudo deploy`
+2. Copy your SSH public key so you can log in directly as `deploy`.
+   - `sudo rsync --archive --chown=deploy:deploy ~/.ssh /home/deploy`
+3. Reconnect using the new account: `ssh deploy@<linode-ip>`.
+
+## 3. Secure the firewall
+1. Allow SSH, HTTP, and HTTPS.
+   - `sudo ufw allow OpenSSH`
+   - `sudo ufw allow http`
+   - `sudo ufw allow https`
+2. Enable the firewall: `sudo ufw enable`.
+
+## 4. Install runtime dependencies
+### Node.js (LTS)
+1. Install via NodeSource.
+   - `curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -`
+   - `sudo apt install -y nodejs`
+2. Verify with `node -v` and `npm -v`.
+
+### PostgreSQL 15
+1. Install packages: `sudo apt install -y postgresql postgresql-contrib`.
+2. Ensure the service is enabled and running: `sudo systemctl enable --now postgresql`.
+3. Create database role and database (replace passwords for production):
+   ```sql
+   sudo -i -u postgres psql <<'SQL'
+   CREATE ROLE jangid_admin WITH LOGIN PASSWORD 'change-me';
+   ALTER ROLE jangid_admin WITH CREATEDB;
+   CREATE DATABASE jangid_prod OWNER jangid_admin;
+   \q
+   SQL
+   ```
+
+### Nginx & Certbot
+1. Install: `sudo apt install -y nginx` then `sudo systemctl enable --now nginx`.
+2. Install Certbot for TLS: `sudo apt install -y certbot python3-certbot-nginx`.
+
+### Optional tools
+- `pm2` for process management: `sudo npm install -g pm2` then `pm2 startup systemd`.
+- `fail2ban` to rate-limit SSH if needed: `sudo apt install -y fail2ban`.
+
+## 5. Prepare project directory
+1. Create the application root and grant ownership.
+   - `sudo mkdir -p /var/www/jangid-platform`
+   - `sudo chown deploy:deploy /var/www/jangid-platform`
+2. Place environment secrets in `/var/www/jangid-platform/.env` (never commit this file).
+
+## 6. Configure PostgreSQL
+1. Confirm Postgres listens only on localhost (`/etc/postgresql/15/main/postgresql.conf`).
+2. Adjust access rules in `pg_hba.conf` if remote connections are required.
+3. Restart if configuration changes: `sudo systemctl restart postgresql`.
+
+## 7. Nginx reverse proxy templates
+Create `/etc/nginx/sites-available/jangid.conf` with upstreams for the API (port 4000) and Nuxt web (port 3000). Example:
+```
+upstream jangid_api { server 127.0.0.1:4000; }
+upstream jangid_web { server 127.0.0.1:3000; }
+
+server {
+  listen 80;
+  server_name api.jangid.co.in;
+  location / {
+    proxy_pass http://jangid_api;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+
+server {
+  listen 80;
+  server_name app.jangid.co.in;
+  location / {
+    proxy_pass http://jangid_web;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+  }
+}
+```
+Enable and reload:
+```
+sudo ln -s /etc/nginx/sites-available/jangid.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+After services are running, request certificates:
+```
+sudo certbot --nginx -d api.jangid.co.in -d app.jangid.co.in
+```
+
+## 8. Deploy the application
+1. Clone the repository:
+   ```bash
+   cd /var/www/jangid-platform
+   git clone git@github.com:<your-user>/jangid-platform.git .
+   ```
+2. Install dependencies: `npm install`.
+3. Build packages:
+   - `npm run build --workspace @jangid/shared`
+   - `npm run build --workspace @jangid/api`
+   - `npm run build --workspace @jangid/web`
+4. Apply database schema and seed data (provide DATABASE_URL inline or via `.env`).
+   - `npm run prisma:deploy --workspace @jangid/api`
+   - `npm run seed --workspace @jangid/api`
+5. Start services (PM2 example):
+   ```bash
+   pm2 start ecosystem.config.js
+   pm2 save
+   ```
+6. Verify health:
+   - API: `curl -H "Host: api.jangid.co.in" http://127.0.0.1:4000/health`
+   - Frontend: visit `https://app.jangid.co.in`
+
+## 9. Maintenance checklist
+- Monitor logs (`pm2 logs`, `journalctl -u nginx`).
+- Schedule database backups with `pg_dump` or Linode backups.
+- Regularly apply system updates (`sudo apt update && sudo apt upgrade`).
+- Document any production secrets and rotate them periodically.

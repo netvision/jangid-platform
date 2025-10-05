@@ -110,7 +110,7 @@
         "./color-mode-options.mjs"
       ],
       "#icon-collections": [
-        "./icon-collections"
+        "./icon-collections.mjs"
       ],
       "#vue-router": [
         "../../../node_modules/vue-router"
@@ -122,7 +122,7 @@
         "./imports"
       ],
       "#app-manifest": [
-        "./manifest/meta/55200f91-5449-4f76-ab7b-2c53dbb759b5.json"
+        "./manifest/meta/96bd75a1-2deb-435c-8531-46715e41bbc4.json"
       ],
       "#components": [
         "./components"
