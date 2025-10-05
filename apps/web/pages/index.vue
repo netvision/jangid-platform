@@ -5,7 +5,7 @@
         Discover professionals across the Jangid community
       </h1>
       <p class="mx-auto max-w-2xl text-lg text-muted-foreground">
-        Lets begin......
+        Lets begin again......
       </p>
       <div class="mx-auto flex w-full max-w-xl flex-col gap-3 md:flex-row">
         <input
