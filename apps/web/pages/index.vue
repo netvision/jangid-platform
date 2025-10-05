@@ -5,7 +5,7 @@
         Discover professionals across the Jangid community
       </h1>
       <p class="mx-auto max-w-2xl text-lg text-muted-foreground">
-        Explore curated visiting cards and brochure sites, highlight your brand, and connect with trusted service providers.
+        Lets begin......
       </p>
       <div class="mx-auto flex w-full max-w-xl flex-col gap-3 md:flex-row">
         <input
