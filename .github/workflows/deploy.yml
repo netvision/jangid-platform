@@ -1,0 +1,21 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: SSH deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger remote deployment
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -e
+            bash /var/www/jangid-platform/scripts/deploy.sh main

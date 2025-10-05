@@ -110,7 +110,7 @@
         "./color-mode-options.mjs"
       ],
       "#icon-collections": [
-        "./icon-collections.mjs"
+        "./icon-collections"
       ],
       "#vue-router": [
         "../../../node_modules/vue-router"
@@ -122,7 +122,7 @@
         "./imports"
       ],
       "#app-manifest": [
-        "./manifest/meta/96bd75a1-2deb-435c-8531-46715e41bbc4.json"
+        "./manifest/meta/dev.json"
       ],
       "#components": [
         "./components"
@@ -188,6 +188,6 @@
     "../../../node_modules/@nuxt/telemetry/node_modules",
     "../../../node_modules/runtime/server",
     "../../../node_modules/dist/runtime/server",
-    "../.output"
+    "dev"
   ]
 }
