@@ -1,6 +1,6 @@
 import { l as defineStore, a as useRuntimeConfig, b as useNuxtApp } from './server.mjs';
 import { ref, computed } from 'vue';
-import { $ as $fetch, v as destr, q as klona, x as getRequestHeader, y as isEqual, z as setCookie, A as getCookie, B as deleteCookie } from '../nitro/nitro.mjs';
+import { $ as $fetch, x as destr, r as klona, y as getRequestHeader, z as isEqual, A as setCookie, B as getCookie, C as deleteCookie } from '../nitro/nitro.mjs';
 
 function parse(str, options) {
   if (typeof str !== "string") {

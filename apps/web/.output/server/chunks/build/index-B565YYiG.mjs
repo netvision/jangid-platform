@@ -1,4 +1,4 @@
-import { q as klona, r as defuFn } from '../nitro/nitro.mjs';
+import { r as klona, v as defuFn } from '../nitro/nitro.mjs';
 import { b as useNuxtApp, i as defineAppConfig } from './server.mjs';
 
 const cfg0 = defineAppConfig({

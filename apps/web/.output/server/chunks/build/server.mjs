@@ -1,5 +1,5 @@
 import process from 'node:process';globalThis._importMeta_=globalThis._importMeta_||{url:"file:///_entry.js",env:process.env};import { toRef, isRef, toRaw, computed, isReactive, hasInjectionContext, getCurrentInstance, inject, ref, reactive, effectScope, getCurrentScope, onScopeDispose, watch, nextTick, toRefs, markRaw, defineComponent, createElementBlock, shallowRef, provide, cloneVNode, h, defineAsyncComponent, unref, shallowReactive, Suspense, Fragment, createApp, onErrorCaptured, onServerPrefetch, createVNode, resolveDynamicComponent, isReadonly, isShallow, mergeProps, withCtx, useSSRContext } from 'vue';
-import { c as createError$1, h as hasProtocol, k as isScriptProtocol, f as joinURL, w as withQuery, s as sanitizeStatusCode, l as getContext, $ as $fetch, m as createHooks, n as executeAsync, t as toRouteMatcher, o as createRouter$1, p as defu } from '../nitro/nitro.mjs';
+import { e as createError$1, h as hasProtocol, l as isScriptProtocol, i as joinURL, w as withQuery, s as sanitizeStatusCode, m as getContext, $ as $fetch, n as createHooks, o as executeAsync, t as toRouteMatcher, p as createRouter$1, q as defu } from '../nitro/nitro.mjs';
 import { u as useHead$1, h as headSymbol, b as baseURL } from '../routes/renderer.mjs';
 import { useRoute as useRoute$1, RouterView, createMemoryHistory, createRouter, START_LOCATION } from 'vue-router';
 import { ssrRenderSuspense, ssrRenderComponent, ssrRenderVNode } from 'vue/server-renderer';
@@ -451,7 +451,7 @@ const _routes = [
   {
     name: "index",
     path: "/",
-    component: () => import('./index-FddZJ3Dl.mjs')
+    component: () => import('./index-Dbwje8QO.mjs')
   },
   {
     name: "terms",
@@ -471,7 +471,7 @@ const _routes = [
   {
     name: "auth-register",
     path: "/auth/register",
-    component: () => import('./register-BnSuw9Wc.mjs')
+    component: () => import('./register-Co9PlFta.mjs')
   },
   {
     name: "pricing",
@@ -493,7 +493,7 @@ const _routes = [
   {
     name: "categories",
     path: "/categories",
-    component: () => import('./index-BJ9_S0BV.mjs')
+    component: () => import('./index-RPOEqCYc.mjs')
   },
   {
     name: "highlights",
@@ -504,7 +504,7 @@ const _routes = [
     name: "dashboard-superadmin",
     path: "/dashboard/superadmin",
     meta: { "middleware": ["super-admin"] },
-    component: () => import('./index-CoAOGene.mjs')
+    component: () => import('./index-CdW7TXlN.mjs')
   }
 ];
 const _wrapInTransition = (props, children) => {
@@ -1595,7 +1595,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
 const _sfc_setup$2 = _sfc_main$2.setup;
 _sfc_main$2.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("App.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("app.vue");
   return _sfc_setup$2 ? _sfc_setup$2(props, ctx) : void 0;
 };
 const AppComponent = /* @__PURE__ */ _export_sfc(_sfc_main$2, [["ssrRender", _sfc_ssrRender]]);

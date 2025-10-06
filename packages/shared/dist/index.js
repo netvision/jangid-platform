@@ -33,10 +33,85 @@ var categorySchema = z2.object({
   description: z2.string().nullable().optional()
 });
 var categoriesResponseSchema = z2.array(categorySchema);
+
+// src/schemas/super-admin-dashboard.ts
+import { z as z3 } from "zod";
+var metricCardSchema = z3.object({
+  label: z3.string(),
+  value: z3.string(),
+  delta: z3.string(),
+  trend: z3.enum(["up", "down", "neutral"]).default("neutral"),
+  updatedAgo: z3.string()
+});
+var pendingProfileCardSchema = z3.object({
+  id: z3.string(),
+  displayName: z3.string(),
+  category: z3.string(),
+  submittedAgo: z3.string(),
+  contactEmail: z3.string().email().optional(),
+  phone: z3.string().optional(),
+  priority: z3.enum(["low", "medium", "high"]).default("medium")
+});
+var signalItemSchema = z3.object({
+  title: z3.string(),
+  message: z3.string(),
+  severity: z3.enum(["info", "success", "warning"])
+});
+var signupRowSchema = z3.object({
+  id: z3.string(),
+  business: z3.string(),
+  owner: z3.string(),
+  category: z3.string(),
+  status: z3.enum(["APPROVED", "PENDING_REVIEW", "DRAFT"]),
+  statusLabel: z3.string(),
+  joinedAgo: z3.string()
+});
+var quickActionSchema = z3.object({
+  id: z3.string(),
+  label: z3.string(),
+  description: z3.string(),
+  href: z3.string(),
+  ctaLabel: z3.string(),
+  tone: z3.enum(["primary", "neutral", "destructive"]).default("primary")
+});
+var healthCheckSchema = z3.object({
+  id: z3.string(),
+  label: z3.string(),
+  status: z3.enum(["pass", "warn", "fail"]).default("pass"),
+  message: z3.string(),
+  updatedAgo: z3.string()
+});
+var activityItemSchema = z3.object({
+  id: z3.string(),
+  actor: z3.string(),
+  action: z3.string(),
+  target: z3.string(),
+  timestampAgo: z3.string(),
+  severity: z3.enum(["info", "success", "warning"]),
+  icon: z3.string().optional()
+});
+var superAdminDashboardSchema = z3.object({
+  generatedAt: z3.string(),
+  metrics: z3.array(metricCardSchema),
+  pendingProfiles: z3.array(pendingProfileCardSchema),
+  signals: z3.array(signalItemSchema),
+  latestSignups: z3.array(signupRowSchema),
+  quickActions: z3.array(quickActionSchema),
+  healthChecks: z3.array(healthCheckSchema),
+  recentActivity: z3.array(activityItemSchema)
+});
 export {
+  activityItemSchema,
   categoriesResponseSchema,
   categorySchema,
+  healthCheckSchema,
+  metricCardSchema,
+  pendingProfileCardSchema,
   profileSchema,
   profileSectionSchema,
-  siteModeSchema
+  quickActionSchema,
+  signalItemSchema,
+  signupRowSchema,
+  siteModeSchema,
+  superAdminDashboardSchema
 };

@@ -2,7 +2,7 @@ import { _ as __nuxt_component_0 } from './nuxt-link-FzQk3-Qr.mjs';
 import { defineComponent, computed, mergeProps, withCtx, createTextVNode, toDisplayString, createVNode, useSSRContext } from 'vue';
 import { ssrRenderAttrs, ssrRenderClass, ssrInterpolate, ssrRenderComponent, ssrRenderList } from 'vue/server-renderer';
 import { useRoute } from 'vue-router';
-import { c as createError } from '../nitro/nitro.mjs';
+import { e as createError } from '../nitro/nitro.mjs';
 import { f as findHighlightProfile, u as useHead, h as highlightProfiles } from './server.mjs';
 import 'node:http';
 import 'node:https';
