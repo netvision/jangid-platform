@@ -175,8 +175,19 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { navigateTo } from '#imports'
-import { highlightProfiles } from '~/data/highlights'
+import { navigateTo, useRequestEvent } from '#imports'
+import { highlightProfiles, findHighlightProfile } from '~/data/highlights'
+
+const requestEvent = useRequestEvent()
+const tenantSlug = requestEvent?.context?.tenantSlug
+
+if (process.server && tenantSlug) {
+  const tenantProfile = findHighlightProfile(tenantSlug)
+
+  if (tenantProfile) {
+    await navigateTo(`/profiles/${tenantProfile.slug}`, { replace: true })
+  }
+}
 
 interface Feature {
   title: string

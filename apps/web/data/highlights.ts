@@ -13,6 +13,7 @@ export interface HighlightProfile {
     email?: string
     website?: string
   }
+  aliases?: string[]
 }
 
 export const highlightProfiles: HighlightProfile[] = [
@@ -20,6 +21,7 @@ export const highlightProfiles: HighlightProfile[] = [
     name: 'Rakesh Furniture Works',
     category: 'Interior & Carpentry',
     slug: 'rakesh-furniture',
+    aliases: ['rakesh', 'rakeshworks'],
     summary: 'Bespoke woodwork crafted with premium teak and modular solutions.',
     accentColor: 'from-blue-500 to-indigo-500',
     description:
@@ -67,6 +69,18 @@ export const highlightProfiles: HighlightProfile[] = [
   }
 ]
 
-export function findHighlightProfile(slug: string): HighlightProfile | undefined {
-  return highlightProfiles.find((profile) => profile.slug === slug)
+export function findHighlightProfile (slug: string): HighlightProfile | undefined {
+  const normalized = slug.trim().toLowerCase()
+
+  return highlightProfiles.find((profile) => {
+    if (profile.slug.toLowerCase() === normalized) {
+      return true
+    }
+
+    if (profile.aliases?.some(alias => alias.toLowerCase() === normalized)) {
+      return true
+    }
+
+    return false
+  })
 }

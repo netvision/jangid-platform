@@ -5,7 +5,7 @@ export default defineEventHandler((event: H3Event) => {
   const host = getRequestHeader(event, 'host') || ''
   const [maybeTenant] = host.split('.')
 
-  if (maybeTenant && !['www', 'app', 'api', 'localhost'].includes(maybeTenant)) {
+  if (maybeTenant && !['www', 'app', 'api', 'localhost', 'jangid'].includes(maybeTenant)) {
     event.context.tenantSlug = maybeTenant.toLowerCase()
   }
 })
