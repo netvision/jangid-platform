@@ -1,9 +1,34 @@
-# Deployment Issue Resolution
+# Deployment Issue Resolution - UPDATED Oct 9, 2025
 
-## Issue Summary
+## Latest Update: Migration Files Missing from Git! 🎯
+
+### NEW ROOT CAUSE DISCOVERED
+The `.gitignore` was ignoring ALL migration files!
+```gitignore
+prisma/migrations/*  ❌ This was the problem!
+!prisma/migrations/.gitkeep
+```
+
+**Result:** Migrations existed locally but were never pushed to GitHub, so the server had no migrations to apply!
+
+### SOLUTION APPLIED (Commit a6732dd)
+1. ✅ Removed migrations from `.gitignore`
+2. ✅ Force-added all 4 migration files to git
+3. ✅ Improved deploy script to fail fast on migration errors
+4. ✅ Pushed to GitHub - automatic deployment will fix everything!
+
+**Migrations now in repository:**
+- `20251004003002_init` - Initial schema
+- `20251009025754_add_category_is_active` - Adds isActive to Category ⭐
+- `20251009120000_add_profile_theme_config` - Adds theme config
+- `20251009120500_add_theme_description` - Adds description
+
+---
+
+## Previous Issue Summary
 GitHub Actions **WAS working** - workflows were triggering correctly. However, deployments were **failing silently** due to a Prisma dependency issue.
 
-## Root Cause
+## Previous Root Cause
 The error occurred during `npm install` on the server:
 ```
 err: sh: 1: prisma: not found
