@@ -30,6 +30,9 @@ export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callba
 export { setInterval } from '#app/compat/interval';
 export { definePageMeta } from '../../../node_modules/nuxt/dist/pages/runtime/composables';
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
+export { useAdminCategoriesStore } from '../stores/adminCategories';
+export { useAdminProfilesStore } from '../stores/adminProfiles';
 export { useAuthStore } from '../stores/auth';
+export { useProfileStore } from '../stores/profile';
 export { defineStore, acceptHMRUpdate, usePinia, storeToRefs } from '../../../node_modules/@pinia/nuxt/dist/runtime/composables';
 export { useColorMode } from '../../../node_modules/@nuxtjs/color-mode/dist/runtime/composables';

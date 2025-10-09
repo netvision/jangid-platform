@@ -1,6 +1,8 @@
 <template>
   <div class="mx-auto max-w-lg space-y-6">
-    <h1 class="text-2xl font-semibold">Login to your dashboard</h1>
+    <h1 class="text-2xl font-semibold">
+      Login to your dashboard
+    </h1>
     <p class="text-sm text-muted-foreground">
       Access your profile, manage content, and customize your public microsite.
     </p>
@@ -14,7 +16,7 @@
           required
           autocomplete="email"
           class="w-full rounded-md border border-border bg-background px-3 py-2"
-        />
+        >
       </div>
       <div class="space-y-2">
         <label class="text-sm font-medium" for="password">Password</label>
@@ -25,9 +27,11 @@
           required
           autocomplete="current-password"
           class="w-full rounded-md border border-border bg-background px-3 py-2"
-        />
+        >
       </div>
-      <p v-if="error" class="text-sm text-red-500">{{ error }}</p>
+      <p v-if="error" class="text-sm text-red-500">
+        {{ error }}
+      </p>
       <button
         class="w-full rounded-md bg-primary px-4 py-2 font-medium text-white disabled:cursor-not-allowed disabled:opacity-70"
         :disabled="loading"
@@ -38,7 +42,9 @@
     </form>
     <p class="text-sm text-muted-foreground">
       Don’t have an account?
-      <NuxtLink to="/auth/register" class="text-primary hover:underline">Create one</NuxtLink>
+      <NuxtLink to="/auth/register" class="text-primary hover:underline">
+        Create one
+      </NuxtLink>
     </p>
   </div>
 </template>
@@ -52,7 +58,7 @@ import { useAuthStore } from '@/stores/auth'
 const router = useRouter()
 const route = useRoute()
 const auth = useAuthStore()
-const { loading, error, isAuthenticated } = storeToRefs(auth)
+const { loading, error, isAuthenticated, user } = storeToRefs(auth)
 
 const form = reactive({
   email: '',
@@ -70,12 +76,22 @@ const onSubmit = async () => {
     await auth.login({ ...form })
     navigateAfterAuth()
   } catch (err) {
-    console.warn('login failed', err)
+    // error state handled by auth store
   }
 }
 
-function navigateAfterAuth() {
-  const redirect = (route.query.redirect as string) || '/dashboard'
-  router.push(redirect)
+function navigateAfterAuth () {
+  const redirect = route.query.redirect as string | undefined
+  if (redirect) {
+    router.push(redirect)
+    return
+  }
+
+  if (user.value?.role === 'SUPER_ADMIN') {
+    router.push('/super-admin')
+    return
+  }
+
+  router.push('/dashboard')
 }
 </script>

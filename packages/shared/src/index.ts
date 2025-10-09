@@ -1,3 +1,7 @@
 export * from './schemas/profile.js'
 export * from './schemas/category.js'
 export * from './schemas/super-admin-dashboard.js'
+export * from './schemas/theme.js'
+export * from './schemas/dashboard-profile.js'
+export * from './schemas/admin-category'
+export * from './schemas/admin-profile'

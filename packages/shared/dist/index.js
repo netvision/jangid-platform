@@ -100,18 +100,125 @@ var superAdminDashboardSchema = z3.object({
   healthChecks: z3.array(healthCheckSchema),
   recentActivity: z3.array(activityItemSchema)
 });
+
+// src/schemas/theme.ts
+import { z as z4 } from "zod";
+var themeConfigSchema = z4.record(z4.string(), z4.unknown()).catch(() => ({}));
+var themeSchema = z4.object({
+  id: z4.string(),
+  slug: z4.string(),
+  name: z4.string(),
+  description: z4.string().nullable(),
+  thumbnail: z4.string().url().nullable(),
+  configSchema: themeConfigSchema
+});
+var themesResponseSchema = z4.object({
+  themes: z4.array(themeSchema)
+});
+
+// src/schemas/dashboard-profile.ts
+import { z as z5 } from "zod";
+var dashboardProfileSchema = z5.object({
+  id: z5.string(),
+  slug: z5.string(),
+  displayName: z5.string(),
+  headline: z5.string().nullable(),
+  summary: z5.string().nullable(),
+  status: z5.enum(["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]),
+  mode: siteModeSchema,
+  themeId: z5.string().nullable(),
+  themeConfig: z5.record(z5.string(), z5.unknown()).catch(() => ({})),
+  contact: z5.object({
+    email: z5.string().email().nullable(),
+    phone: z5.string().nullable(),
+    website: z5.string().nullable(),
+    address: z5.string().nullable()
+  }),
+  services: z5.array(z5.string()),
+  sections: z5.record(z5.string(), z5.unknown()).catch(() => ({})),
+  metrics: z5.object({
+    views30d: z5.number(),
+    enquiries30d: z5.number()
+  }),
+  createdAt: z5.string().or(z5.date()),
+  updatedAt: z5.string().or(z5.date())
+});
+var dashboardProfileResponseSchema = z5.object({
+  profile: dashboardProfileSchema,
+  user: z5.object({
+    id: z5.string(),
+    email: z5.string().email(),
+    isApproved: z5.boolean()
+  })
+});
+
+// src/schemas/admin-category.ts
+import { z as z6 } from "zod";
+var adminCategorySchema = z6.object({
+  id: z6.string(),
+  name: z6.string(),
+  slug: z6.string(),
+  description: z6.string().nullable(),
+  isActive: z6.boolean(),
+  createdAt: z6.string().datetime({ offset: true }),
+  updatedAt: z6.string().datetime({ offset: true })
+});
+var adminCategoriesResponseSchema = z6.object({
+  categories: z6.array(adminCategorySchema)
+});
+
+// src/schemas/admin-profile.ts
+import { z as z7 } from "zod";
+var profileStatusSchema = z7.enum(["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]);
+var adminProfileSchema = z7.object({
+  id: z7.string(),
+  slug: z7.string(),
+  displayName: z7.string(),
+  headline: z7.string().nullable(),
+  summary: z7.string().nullable(),
+  status: profileStatusSchema,
+  mode: siteModeSchema,
+  categoryId: z7.string().nullable(),
+  categoryName: z7.string().nullable(),
+  user: z7.object({
+    id: z7.string(),
+    email: z7.string(),
+    phone: z7.string().nullable(),
+    isApproved: z7.boolean()
+  }),
+  createdAt: z7.coerce.date(),
+  updatedAt: z7.coerce.date()
+});
+var adminProfilesResponseSchema = z7.object({
+  profiles: z7.array(adminProfileSchema)
+});
+var approveProfileSchema = z7.object({
+  approve: z7.boolean(),
+  reason: z7.string().optional()
+});
 export {
   activityItemSchema,
+  adminCategoriesResponseSchema,
+  adminCategorySchema,
+  adminProfileSchema,
+  adminProfilesResponseSchema,
+  approveProfileSchema,
   categoriesResponseSchema,
   categorySchema,
+  dashboardProfileResponseSchema,
+  dashboardProfileSchema,
   healthCheckSchema,
   metricCardSchema,
   pendingProfileCardSchema,
   profileSchema,
   profileSectionSchema,
+  profileStatusSchema,
   quickActionSchema,
   signalItemSchema,
   signupRowSchema,
   siteModeSchema,
-  superAdminDashboardSchema
+  superAdminDashboardSchema,
+  themeConfigSchema,
+  themeSchema,
+  themesResponseSchema
 };

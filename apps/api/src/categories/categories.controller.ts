@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common'
 import { CategoriesService } from './categories.service'
-import type { CategoryDto } from './category.dto'
+import type { CategoryDto } from './dto/category.dto'
 
 @Controller({ path: 'categories' })
 export class CategoriesController {

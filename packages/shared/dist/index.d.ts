@@ -567,4 +567,593 @@ type HealthCheck = z.infer<typeof healthCheckSchema>;
 type ActivityItem = z.infer<typeof activityItemSchema>;
 type SuperAdminDashboard = z.infer<typeof superAdminDashboardSchema>;
 
-export { type ActivityItem, type Category, type CategoryList, type HealthCheck, type MetricCard, type PendingProfileCard, type ProfileInput, type ProfileSectionInput, type QuickAction, type SignalItem, type SignupRow, type SiteMode, type SuperAdminDashboard, activityItemSchema, categoriesResponseSchema, categorySchema, healthCheckSchema, metricCardSchema, pendingProfileCardSchema, profileSchema, profileSectionSchema, quickActionSchema, signalItemSchema, signupRowSchema, siteModeSchema, superAdminDashboardSchema };
+declare const themeConfigSchema: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+declare const themeSchema: z.ZodObject<{
+    id: z.ZodString;
+    slug: z.ZodString;
+    name: z.ZodString;
+    description: z.ZodNullable<z.ZodString>;
+    thumbnail: z.ZodNullable<z.ZodString>;
+    configSchema: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    slug: string;
+    name: string;
+    description: string | null;
+    thumbnail: string | null;
+    configSchema: Record<string, unknown>;
+}, {
+    id: string;
+    slug: string;
+    name: string;
+    description: string | null;
+    thumbnail: string | null;
+    configSchema?: unknown;
+}>;
+declare const themesResponseSchema: z.ZodObject<{
+    themes: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        slug: z.ZodString;
+        name: z.ZodString;
+        description: z.ZodNullable<z.ZodString>;
+        thumbnail: z.ZodNullable<z.ZodString>;
+        configSchema: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        thumbnail: string | null;
+        configSchema: Record<string, unknown>;
+    }, {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        thumbnail: string | null;
+        configSchema?: unknown;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    themes: {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        thumbnail: string | null;
+        configSchema: Record<string, unknown>;
+    }[];
+}, {
+    themes: {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        thumbnail: string | null;
+        configSchema?: unknown;
+    }[];
+}>;
+type ThemeResponse = z.infer<typeof themeSchema>;
+type ThemesResponse = z.infer<typeof themesResponseSchema>;
+
+declare const dashboardProfileSchema: z.ZodObject<{
+    id: z.ZodString;
+    slug: z.ZodString;
+    displayName: z.ZodString;
+    headline: z.ZodNullable<z.ZodString>;
+    summary: z.ZodNullable<z.ZodString>;
+    status: z.ZodEnum<["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]>;
+    mode: z.ZodEnum<["CARD", "BROCHURE"]>;
+    themeId: z.ZodNullable<z.ZodString>;
+    themeConfig: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    contact: z.ZodObject<{
+        email: z.ZodNullable<z.ZodString>;
+        phone: z.ZodNullable<z.ZodString>;
+        website: z.ZodNullable<z.ZodString>;
+        address: z.ZodNullable<z.ZodString>;
+    }, "strip", z.ZodTypeAny, {
+        email: string | null;
+        phone: string | null;
+        website: string | null;
+        address: string | null;
+    }, {
+        email: string | null;
+        phone: string | null;
+        website: string | null;
+        address: string | null;
+    }>;
+    services: z.ZodArray<z.ZodString, "many">;
+    sections: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+    metrics: z.ZodObject<{
+        views30d: z.ZodNumber;
+        enquiries30d: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        views30d: number;
+        enquiries30d: number;
+    }, {
+        views30d: number;
+        enquiries30d: number;
+    }>;
+    createdAt: z.ZodUnion<[z.ZodString, z.ZodDate]>;
+    updatedAt: z.ZodUnion<[z.ZodString, z.ZodDate]>;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+    slug: string;
+    displayName: string;
+    headline: string | null;
+    summary: string | null;
+    mode: "CARD" | "BROCHURE";
+    sections: Record<string, unknown>;
+    metrics: {
+        views30d: number;
+        enquiries30d: number;
+    };
+    themeId: string | null;
+    themeConfig: Record<string, unknown>;
+    contact: {
+        email: string | null;
+        phone: string | null;
+        website: string | null;
+        address: string | null;
+    };
+    services: string[];
+    createdAt: string | Date;
+    updatedAt: string | Date;
+}, {
+    id: string;
+    status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+    slug: string;
+    displayName: string;
+    headline: string | null;
+    summary: string | null;
+    mode: "CARD" | "BROCHURE";
+    metrics: {
+        views30d: number;
+        enquiries30d: number;
+    };
+    themeId: string | null;
+    contact: {
+        email: string | null;
+        phone: string | null;
+        website: string | null;
+        address: string | null;
+    };
+    services: string[];
+    createdAt: string | Date;
+    updatedAt: string | Date;
+    sections?: unknown;
+    themeConfig?: unknown;
+}>;
+declare const dashboardProfileResponseSchema: z.ZodObject<{
+    profile: z.ZodObject<{
+        id: z.ZodString;
+        slug: z.ZodString;
+        displayName: z.ZodString;
+        headline: z.ZodNullable<z.ZodString>;
+        summary: z.ZodNullable<z.ZodString>;
+        status: z.ZodEnum<["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]>;
+        mode: z.ZodEnum<["CARD", "BROCHURE"]>;
+        themeId: z.ZodNullable<z.ZodString>;
+        themeConfig: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        contact: z.ZodObject<{
+            email: z.ZodNullable<z.ZodString>;
+            phone: z.ZodNullable<z.ZodString>;
+            website: z.ZodNullable<z.ZodString>;
+            address: z.ZodNullable<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        }, {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        }>;
+        services: z.ZodArray<z.ZodString, "many">;
+        sections: z.ZodCatch<z.ZodRecord<z.ZodString, z.ZodUnknown>>;
+        metrics: z.ZodObject<{
+            views30d: z.ZodNumber;
+            enquiries30d: z.ZodNumber;
+        }, "strip", z.ZodTypeAny, {
+            views30d: number;
+            enquiries30d: number;
+        }, {
+            views30d: number;
+            enquiries30d: number;
+        }>;
+        createdAt: z.ZodUnion<[z.ZodString, z.ZodDate]>;
+        updatedAt: z.ZodUnion<[z.ZodString, z.ZodDate]>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        sections: Record<string, unknown>;
+        metrics: {
+            views30d: number;
+            enquiries30d: number;
+        };
+        themeId: string | null;
+        themeConfig: Record<string, unknown>;
+        contact: {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        };
+        services: string[];
+        createdAt: string | Date;
+        updatedAt: string | Date;
+    }, {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        metrics: {
+            views30d: number;
+            enquiries30d: number;
+        };
+        themeId: string | null;
+        contact: {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        };
+        services: string[];
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        sections?: unknown;
+        themeConfig?: unknown;
+    }>;
+    user: z.ZodObject<{
+        id: z.ZodString;
+        email: z.ZodString;
+        isApproved: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        email: string;
+        isApproved: boolean;
+    }, {
+        id: string;
+        email: string;
+        isApproved: boolean;
+    }>;
+}, "strip", z.ZodTypeAny, {
+    profile: {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        sections: Record<string, unknown>;
+        metrics: {
+            views30d: number;
+            enquiries30d: number;
+        };
+        themeId: string | null;
+        themeConfig: Record<string, unknown>;
+        contact: {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        };
+        services: string[];
+        createdAt: string | Date;
+        updatedAt: string | Date;
+    };
+    user: {
+        id: string;
+        email: string;
+        isApproved: boolean;
+    };
+}, {
+    profile: {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        metrics: {
+            views30d: number;
+            enquiries30d: number;
+        };
+        themeId: string | null;
+        contact: {
+            email: string | null;
+            phone: string | null;
+            website: string | null;
+            address: string | null;
+        };
+        services: string[];
+        createdAt: string | Date;
+        updatedAt: string | Date;
+        sections?: unknown;
+        themeConfig?: unknown;
+    };
+    user: {
+        id: string;
+        email: string;
+        isApproved: boolean;
+    };
+}>;
+type DashboardProfile = z.infer<typeof dashboardProfileSchema>;
+type DashboardProfileResponse = z.infer<typeof dashboardProfileResponseSchema>;
+type ThemeSummary = z.infer<typeof themeSchema>;
+
+declare const adminCategorySchema: z.ZodObject<{
+    id: z.ZodString;
+    name: z.ZodString;
+    slug: z.ZodString;
+    description: z.ZodNullable<z.ZodString>;
+    isActive: z.ZodBoolean;
+    createdAt: z.ZodString;
+    updatedAt: z.ZodString;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    slug: string;
+    name: string;
+    description: string | null;
+    createdAt: string;
+    updatedAt: string;
+    isActive: boolean;
+}, {
+    id: string;
+    slug: string;
+    name: string;
+    description: string | null;
+    createdAt: string;
+    updatedAt: string;
+    isActive: boolean;
+}>;
+declare const adminCategoriesResponseSchema: z.ZodObject<{
+    categories: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        name: z.ZodString;
+        slug: z.ZodString;
+        description: z.ZodNullable<z.ZodString>;
+        isActive: z.ZodBoolean;
+        createdAt: z.ZodString;
+        updatedAt: z.ZodString;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        isActive: boolean;
+    }, {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        isActive: boolean;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    categories: {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        isActive: boolean;
+    }[];
+}, {
+    categories: {
+        id: string;
+        slug: string;
+        name: string;
+        description: string | null;
+        createdAt: string;
+        updatedAt: string;
+        isActive: boolean;
+    }[];
+}>;
+type AdminCategory = z.infer<typeof adminCategorySchema>;
+type AdminCategoriesResponse = z.infer<typeof adminCategoriesResponseSchema>;
+
+declare const profileStatusSchema: z.ZodEnum<["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]>;
+declare const adminProfileSchema: z.ZodObject<{
+    id: z.ZodString;
+    slug: z.ZodString;
+    displayName: z.ZodString;
+    headline: z.ZodNullable<z.ZodString>;
+    summary: z.ZodNullable<z.ZodString>;
+    status: z.ZodEnum<["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]>;
+    mode: z.ZodEnum<["CARD", "BROCHURE"]>;
+    categoryId: z.ZodNullable<z.ZodString>;
+    categoryName: z.ZodNullable<z.ZodString>;
+    user: z.ZodObject<{
+        id: z.ZodString;
+        email: z.ZodString;
+        phone: z.ZodNullable<z.ZodString>;
+        isApproved: z.ZodBoolean;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        email: string;
+        phone: string | null;
+        isApproved: boolean;
+    }, {
+        id: string;
+        email: string;
+        phone: string | null;
+        isApproved: boolean;
+    }>;
+    createdAt: z.ZodDate;
+    updatedAt: z.ZodDate;
+}, "strip", z.ZodTypeAny, {
+    id: string;
+    status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+    slug: string;
+    displayName: string;
+    headline: string | null;
+    summary: string | null;
+    mode: "CARD" | "BROCHURE";
+    createdAt: Date;
+    updatedAt: Date;
+    user: {
+        id: string;
+        email: string;
+        phone: string | null;
+        isApproved: boolean;
+    };
+    categoryId: string | null;
+    categoryName: string | null;
+}, {
+    id: string;
+    status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+    slug: string;
+    displayName: string;
+    headline: string | null;
+    summary: string | null;
+    mode: "CARD" | "BROCHURE";
+    createdAt: Date;
+    updatedAt: Date;
+    user: {
+        id: string;
+        email: string;
+        phone: string | null;
+        isApproved: boolean;
+    };
+    categoryId: string | null;
+    categoryName: string | null;
+}>;
+declare const adminProfilesResponseSchema: z.ZodObject<{
+    profiles: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        slug: z.ZodString;
+        displayName: z.ZodString;
+        headline: z.ZodNullable<z.ZodString>;
+        summary: z.ZodNullable<z.ZodString>;
+        status: z.ZodEnum<["DRAFT", "PENDING_REVIEW", "APPROVED", "SUSPENDED"]>;
+        mode: z.ZodEnum<["CARD", "BROCHURE"]>;
+        categoryId: z.ZodNullable<z.ZodString>;
+        categoryName: z.ZodNullable<z.ZodString>;
+        user: z.ZodObject<{
+            id: z.ZodString;
+            email: z.ZodString;
+            phone: z.ZodNullable<z.ZodString>;
+            isApproved: z.ZodBoolean;
+        }, "strip", z.ZodTypeAny, {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        }, {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        }>;
+        createdAt: z.ZodDate;
+        updatedAt: z.ZodDate;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        createdAt: Date;
+        updatedAt: Date;
+        user: {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        };
+        categoryId: string | null;
+        categoryName: string | null;
+    }, {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        createdAt: Date;
+        updatedAt: Date;
+        user: {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        };
+        categoryId: string | null;
+        categoryName: string | null;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    profiles: {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        createdAt: Date;
+        updatedAt: Date;
+        user: {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        };
+        categoryId: string | null;
+        categoryName: string | null;
+    }[];
+}, {
+    profiles: {
+        id: string;
+        status: "APPROVED" | "PENDING_REVIEW" | "DRAFT" | "SUSPENDED";
+        slug: string;
+        displayName: string;
+        headline: string | null;
+        summary: string | null;
+        mode: "CARD" | "BROCHURE";
+        createdAt: Date;
+        updatedAt: Date;
+        user: {
+            id: string;
+            email: string;
+            phone: string | null;
+            isApproved: boolean;
+        };
+        categoryId: string | null;
+        categoryName: string | null;
+    }[];
+}>;
+declare const approveProfileSchema: z.ZodObject<{
+    approve: z.ZodBoolean;
+    reason: z.ZodOptional<z.ZodString>;
+}, "strip", z.ZodTypeAny, {
+    approve: boolean;
+    reason?: string | undefined;
+}, {
+    approve: boolean;
+    reason?: string | undefined;
+}>;
+type AdminProfile = z.infer<typeof adminProfileSchema>;
+type AdminProfilesResponse = z.infer<typeof adminProfilesResponseSchema>;
+type ApproveProfile = z.infer<typeof approveProfileSchema>;
+
+export { type ActivityItem, type AdminCategoriesResponse, type AdminCategory, type AdminProfile, type AdminProfilesResponse, type ApproveProfile, type Category, type CategoryList, type DashboardProfile, type DashboardProfileResponse, type HealthCheck, type MetricCard, type PendingProfileCard, type ProfileInput, type ProfileSectionInput, type QuickAction, type SignalItem, type SignupRow, type SiteMode, type SuperAdminDashboard, type ThemeResponse, type ThemeSummary, type ThemesResponse, activityItemSchema, adminCategoriesResponseSchema, adminCategorySchema, adminProfileSchema, adminProfilesResponseSchema, approveProfileSchema, categoriesResponseSchema, categorySchema, dashboardProfileResponseSchema, dashboardProfileSchema, healthCheckSchema, metricCardSchema, pendingProfileCardSchema, profileSchema, profileSectionSchema, profileStatusSchema, quickActionSchema, signalItemSchema, signupRowSchema, siteModeSchema, superAdminDashboardSchema, themeConfigSchema, themeSchema, themesResponseSchema };

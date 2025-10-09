@@ -20,17 +20,20 @@ async function main() {
     {
       name: 'Interior & Carpentry',
       slug: 'interior-carpentry',
-      description: 'Modular kitchens, wardrobes, bespoke furniture, and carpentry services.'
+      description: 'Modular kitchens, wardrobes, bespoke furniture, and carpentry services.',
+      isActive: true
     },
     {
       name: 'Events & Decor',
       slug: 'events-decor',
-      description: 'Wedding planners, stage designers, florists, and corporate event services.'
+      description: 'Wedding planners, stage designers, florists, and corporate event services.',
+      isActive: true
     },
     {
       name: 'Printing & Branding',
       slug: 'printing-branding',
-      description: 'Digital printing, signage, promotional merchandise, and branding studios.'
+      description: 'Digital printing, signage, promotional merchandise, and branding studios.',
+      isActive: true
     }
   ]
 
@@ -39,7 +42,61 @@ async function main() {
       await prisma.category.upsert({
         where: { slug: category.slug },
         create: category,
-        update: category
+        update: {
+          name: category.name,
+          description: category.description,
+          isActive: category.isActive
+        }
+      })
+    })
+  )
+
+  const defaultThemes = [
+    {
+      slug: 'classic-card',
+      name: 'Classic Card',
+      description: 'Elegant visiting-card layout with warm tones.',
+      thumbnail: 'https://cdn.jangid.co.in/themes/classic-card.png',
+      config: {
+        palette: {
+          options: ['warm', 'cool', 'neutral'],
+          default: 'warm'
+        },
+        accentColor: {
+          default: '#d97706'
+        }
+      }
+    },
+    {
+      slug: 'modern-brochure',
+      name: 'Modern Brochure',
+      description: 'Wide hero layout with rich imagery and layered sections.',
+      thumbnail: 'https://cdn.jangid.co.in/themes/modern-brochure.png',
+      config: {
+        palette: {
+          options: ['ember', 'ocean', 'slate'],
+          default: 'ember'
+        },
+        typography: {
+          heading: 'Playfair Display',
+          body: 'Work Sans'
+        }
+      }
+    }
+  ]
+
+  await Promise.all(
+    defaultThemes.map(async (theme) => {
+      await prisma.theme.upsert({
+        where: { slug: theme.slug },
+        create: theme,
+        update: {
+          name: theme.name,
+          description: theme.description,
+          thumbnail: theme.thumbnail,
+          config: theme.config,
+          isActive: true
+        }
       })
     })
   )
@@ -71,7 +128,14 @@ async function main() {
           slug: 'super-admin',
           displayName: 'Super Admin',
           status: ProfileStatus.APPROVED,
-          mode: SiteMode.CARD
+          mode: SiteMode.CARD,
+          theme: {
+            connect: { slug: 'classic-card' }
+          },
+          themeConfig: {
+            palette: 'warm',
+            accentColor: '#d97706'
+          }
         }
       }
     }

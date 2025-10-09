@@ -1136,36 +1136,7 @@ _mEtFIXuSTrbWdiJfzm0JWMJcWWijmqB4kma6lG0bRo,
 _e4gjkzYsbykxizNQqXiQwF1RZ7rMCjXISpFCVYC2Te4
 ];
 
-const assets = {
-  "/._index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1000-JOVlKkAZISQi6PD6t80kdFyH8a0\"",
-    "mtime": "2025-10-08T01:40:16.520Z",
-    "size": 4096,
-    "path": "._index.mjs"
-  },
-  "/._index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"1000-JOVlKkAZISQi6PD6t80kdFyH8a0\"",
-    "mtime": "2025-10-08T01:40:16.520Z",
-    "size": 4096,
-    "path": "._index.mjs.map"
-  },
-  "/index.mjs": {
-    "type": "text/javascript; charset=utf-8",
-    "etag": "\"1407b-PeHOf8jQey5q4hhTYisB3Z2rDtE\"",
-    "mtime": "2025-10-08T01:40:16.530Z",
-    "size": 82043,
-    "path": "index.mjs"
-  },
-  "/index.mjs.map": {
-    "type": "application/json",
-    "etag": "\"4e4d6-ADItHDV4aXX/U0JQGIHaspTNknY\"",
-    "mtime": "2025-10-08T01:40:16.530Z",
-    "size": 320726,
-    "path": "index.mjs.map"
-  }
-};
+const assets = {};
 
 function readAsset (id) {
   const serverDir = dirname$1(fileURLToPath(globalThis._importMeta_.url));

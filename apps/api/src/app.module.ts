@@ -7,6 +7,8 @@ import { AppService } from './app.service'
 import { DatabaseModule } from './database/database.module'
 import { AuthModule } from './auth/auth.module'
 import { CategoriesModule } from './categories/categories.module'
+import { ProfilesModule } from './profiles/profiles.module'
+import { ThemesModule } from './themes/themes.module'
 
 @Module({
   imports: [
@@ -19,7 +21,9 @@ import { CategoriesModule } from './categories/categories.module'
     DatabaseModule,
     HealthModule,
     AuthModule,
-    CategoriesModule
+    CategoriesModule,
+    ProfilesModule,
+    ThemesModule
   ],
   controllers: [AppController],
   providers: [AppService]

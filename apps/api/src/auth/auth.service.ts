@@ -10,6 +10,7 @@ import { LoginDto } from './dto/login.dto'
 import { RefreshDto } from './dto/refresh.dto'
 import type { AuthResponse, AuthUser } from './interfaces/auth-response.interface'
 import type { JwtPayload } from './interfaces/jwt-payload.interface'
+import { DEFAULT_THEME_SLUG, RESERVED_PROFILE_SLUGS } from '../profiles/reserved-slugs.constant'
 
 type UserWithProfile = Prisma.UserGetPayload<{ include: { profile: true } }>
 interface AuthContext {
@@ -34,7 +35,19 @@ export class AuthService {
   async register(dto: RegisterDto, context: AuthContext): Promise<AuthResponse> {
     const { email, password, displayName, slug, phone, categoryId } = dto
 
+    const normalizedSlug = slug.trim().toLowerCase()
+
+    if (RESERVED_PROFILE_SLUGS.has(normalizedSlug)) {
+      throw new ConflictException('Subdomain is reserved')
+    }
+
     const passwordHash = await bcrypt.hash(password, 12)
+    const defaultTheme = await this.prisma.theme.findFirst({
+      where: {
+        slug: DEFAULT_THEME_SLUG,
+        isActive: true
+      }
+    })
 
     try {
       const user = await this.prisma.user.create({
@@ -46,11 +59,27 @@ export class AuthService {
           isApproved: false,
           profile: {
             create: {
-              slug,
+              slug: normalizedSlug,
               displayName,
               status: ProfileStatus.PENDING_REVIEW,
               mode: SiteMode.CARD,
-              categoryId: categoryId || undefined
+              services: [] as Prisma.JsonArray,
+              sections: Prisma.JsonNull,
+              themeConfig: defaultTheme?.config ?? Prisma.JsonNull,
+              ...(categoryId
+                ? {
+                    category: {
+                      connect: { id: categoryId }
+                    }
+                  }
+                : {}),
+              ...(defaultTheme
+                ? {
+                    theme: {
+                      connect: { id: defaultTheme.id }
+                    }
+                  }
+                : {})
             }
           }
         },
@@ -62,17 +91,15 @@ export class AuthService {
   return this.issueTokens(user as UserWithProfile, context)
     } catch (error: unknown) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        const prismaError = error as Prisma.PrismaClientKnownRequestError
-
-        if (prismaError.code === 'P2002') {
-          if ((prismaError.meta?.target as string[] | undefined)?.includes('email')) {
+        if (error.code === 'P2002') {
+          if ((error.meta?.target as string[] | undefined)?.includes('email')) {
             throw new ConflictException('Email already in use')
           }
-          if ((prismaError.meta?.target as string[] | undefined)?.includes('Profile_slug_key')) {
+          if ((error.meta?.target as string[] | undefined)?.includes('Profile_slug_key')) {
             throw new ConflictException('Subdomain already taken')
           }
         }
-        if (prismaError.code === 'P2003') {
+        if (error.code === 'P2003') {
           throw new BadRequestException('Invalid category selected')
         }
       }
