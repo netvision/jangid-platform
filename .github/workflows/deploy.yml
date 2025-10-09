@@ -28,8 +28,12 @@ jobs:
           script: |
             set -e
             BRANCH="${{ github.event.inputs.branch || 'main' }}"
-            echo "Deploying branch: $BRANCH"
-            bash /var/www/jangid-platform/scripts/deploy.sh $BRANCH
+            COMMIT="${{ github.sha }}"
+            echo "Deploying branch: $BRANCH (commit: $COMMIT)"
+            cd /var/www/jangid-platform
+            git fetch --all --prune
+            git reset --hard "$COMMIT"
+            bash scripts/deploy.sh $BRANCH
             
       - name: Deployment complete
         run: echo "✅ Deployment to production completed successfully"

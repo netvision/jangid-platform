@@ -17,11 +17,8 @@ fi
 log "Starting deployment for branch '$BRANCH'"
 cd "$APP_DIR"
 
-log "Fetching latest changes"
-git fetch --all --prune
-git fetch origin "$BRANCH" --force
-git reset --hard "origin/$BRANCH"
-git clean -fdx -e node_modules -e .env -e logs
+log "Git repository updated externally, verifying..."
+git log -1 --oneline
 
 git submodule update --init --recursive >/dev/null 2>&1 || true
 
