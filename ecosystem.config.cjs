@@ -8,7 +8,11 @@ module.exports = {
       exec_mode: 'cluster',
       env_production: {
         NODE_ENV: 'production',
-        PORT: 4000
+        PORT: 4000,
+        JWT_SECRET: 'edf89b1227353476499f06058870beec6509584f28cf90715ad069dc28fd8b07714ae8034e2cb19a801a633ca5de6fd82e2af2d4d7a6ec319ce4a841c7af548',
+        JWT_ACCESS_TTL: '900',
+        JWT_REFRESH_TTL: '1209600',
+        CORS_ORIGIN: 'https://jangid.co.in,https://www.jangid.co.in'
       },
       error_file: '/var/www/jangid-platform/logs/api-error.log',
       out_file: '/var/www/jangid-platform/logs/api-out.log',
