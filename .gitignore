@@ -40,8 +40,9 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 
 # Prisma
-prisma/migrations/*
-!prisma/migrations/.gitkeep
+# Note: Migrations SHOULD be version controlled!
+# Only ignore the migration_lock.toml if using different providers locally
+# prisma/migrations/migration_lock.toml
 
 # Logs
 logs/

@@ -44,8 +44,14 @@ npm run build --workspace @jangid/web
 
 log "Running database migrations"
 if [ -d "prisma/migrations" ] && [ "$(ls -A prisma/migrations)" ]; then
-  npx prisma migrate deploy --schema prisma/schema.prisma
+  log "Applying migrations with prisma migrate deploy"
+  if ! npx prisma migrate deploy --schema prisma/schema.prisma; then
+    log "ERROR: Migration failed!"
+    exit 1
+  fi
+  log "Migrations applied successfully"
 else
+  log "No migrations found, using db push"
   npx prisma db push --schema prisma/schema.prisma
 fi
 
