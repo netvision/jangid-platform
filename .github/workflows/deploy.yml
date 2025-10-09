@@ -4,12 +4,21 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: false
+        default: 'main'
 
 jobs:
   deploy:
     name: SSH deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
       - name: Trigger remote deployment
         uses: appleboy/ssh-action@v1.1.0
         with:
@@ -18,4 +27,9 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             set -e
-            bash /var/www/jangid-platform/scripts/deploy.sh main
+            BRANCH="${{ github.event.inputs.branch || 'main' }}"
+            echo "Deploying branch: $BRANCH"
+            bash /var/www/jangid-platform/scripts/deploy.sh $BRANCH
+            
+      - name: Deployment complete
+        run: echo "✅ Deployment to production completed successfully"
