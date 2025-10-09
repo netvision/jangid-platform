@@ -14,13 +14,17 @@
     "build": "npm run build --workspace @jangid/shared && npm run build --workspace @jangid/api && npm run build --workspace @jangid/web",
     "lint": "npm run lint --workspace @jangid/api && npm run lint --workspace @jangid/web",
     "typecheck": "npm run typecheck --workspace @jangid/api && npm run typecheck --workspace @jangid/web",
-    "db:generate": "npm run prisma:generate --workspace @jangid/api",
-    "db:migrate": "npm run prisma:migrate --workspace @jangid/api",
-    "postinstall": "npm run db:generate"
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "db:deploy": "prisma migrate deploy --schema prisma/schema.prisma"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "prettier": "^3.2.5",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "prisma": "^5.15.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.15.0"
   }
 }
