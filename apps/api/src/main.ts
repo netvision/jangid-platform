@@ -18,10 +18,35 @@ async function bootstrap() {
   const allowedOrigins = config.get<string>('corsOrigin', '*')
 
   await app.register<FastifyCorsOptions>(fastifyCors as unknown as FastifyPluginCallback<FastifyCorsOptions>, {
-    origin:
-      allowedOrigins === '*'
-        ? true
-        : allowedOrigins.split(',').map((origin: string) => origin.trim()),
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins === '*') {
+        cb(null, true)
+        return
+      }
+
+      const origins = allowedOrigins.split(',').map(o => o.trim())
+
+      // Check for exact match
+      if (origins.includes(origin)) {
+        cb(null, true)
+        return
+      }
+
+      // Check for wildcard subdomains (e.g. https://*.jangid.co.in)
+      const isAllowed = origins.some(allowed => {
+        if (allowed.includes('*')) {
+          const pattern = new RegExp('^' + allowed.replace(/\./g, '\\.').replace(/\*/g, '.*') + '$')
+          return pattern.test(origin)
+        }
+        return false
+      })
+
+      if (isAllowed) {
+        cb(null, true)
+      } else {
+        cb(new Error('Not allowed by CORS'), false)
+      }
+    },
     credentials: true
   })
 
