@@ -175,17 +175,25 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { navigateTo, useRequestEvent } from '#imports'
-import { highlightProfiles, findHighlightProfile } from '~/data/highlights'
+import { navigateTo, useRequestEvent, useFetch, useRuntimeConfig } from '#imports'
+import type { DashboardProfile } from '~/types/profile'
 
+const config = useRuntimeConfig()
 const requestEvent = useRequestEvent()
 const tenantSlug = requestEvent?.context?.tenantSlug
 
+// Handle Subdomain Routing
 if (process.server && tenantSlug) {
-  const tenantProfile = findHighlightProfile(tenantSlug)
-
-  if (tenantProfile) {
-    await navigateTo(`/profiles/${tenantProfile.slug}`, { replace: true })
+  try {
+    // Fetch profile by slug from API
+    const { data: tenantProfile } = await useFetch<DashboardProfile>(`${config.public.apiBase}/profiles/by-slug/${tenantSlug}`)
+    
+    if (tenantProfile.value) {
+      await navigateTo(`/profiles/${tenantProfile.value.slug}`, { replace: true })
+    }
+  } catch (error) {
+    // If profile not found or error, do nothing (stay on landing page or show 404)
+    console.error(`Failed to resolve tenant: ${tenantSlug}`, error)
   }
 }
 
@@ -195,7 +203,21 @@ interface Feature {
   icon: string
 }
 
-const highlights = highlightProfiles
+// Fetch Highlights Dynamically
+const { data: profiles } = await useFetch<DashboardProfile[]>(`${config.public.apiBase}/profiles/highlights`, {
+  lazy: true,
+  default: () => []
+})
+
+const highlights = computed(() => {
+  return (profiles.value || []).map(p => ({
+    name: p.displayName,
+    category: p.category,
+    slug: p.slug,
+    summary: p.summary || '',
+    accentColor: 'from-amber-500 to-orange-500' // Default accent for now
+  }))
+})
 
 const authMode = ref<'login' | 'register'>('login')
 

@@ -107,9 +107,9 @@ const navigation = [
     icon: 'heroicons:squares-2x2'
   },
   {
-    to: '/super-admin/approvals',
-    label: 'Approvals',
-    icon: 'heroicons:check-badge'
+    to: '/super-admin/profiles',
+    label: 'Profiles',
+    icon: 'heroicons:users'
   }
 ] as const
 

@@ -15,6 +15,12 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
         isApproved: true
       }
     }
+    category: {
+      select: {
+        id: true
+        name: true
+      }
+    }
   }
 }>
 
@@ -45,6 +51,7 @@ export interface DashboardProfile {
   }
   createdAt: Date
   updatedAt: Date
+  category: string
 }
 
 export interface ProfileResponse {
@@ -58,13 +65,14 @@ export interface ProfileResponse {
 
 @Injectable()
 export class ProfilesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async getProfileForUser(userId: string): Promise<ProfileResponse> {
     const profile = await this.prisma.profile.findUnique({
       where: { userId },
       include: {
         theme: true,
+        category: true,
         user: {
           select: {
             id: true,
@@ -82,11 +90,63 @@ export class ProfilesService {
     return this.buildResponse(profile)
   }
 
+  async getHighlights(): Promise<DashboardProfile[]> {
+    const profiles = await this.prisma.profile.findMany({
+      where: {
+        status: ProfileStatus.APPROVED,
+        user: {
+          isApproved: true
+        }
+      },
+      include: {
+        theme: true,
+        category: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            isApproved: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      take: 9
+    })
+
+    return profiles.map(profile => this.mapProfile(profile))
+  }
+
+  async getProfileBySlug(slug: string): Promise<DashboardProfile> {
+    const profile = await this.prisma.profile.findUnique({
+      where: { slug },
+      include: {
+        theme: true,
+        category: true,
+        user: {
+          select: {
+            id: true,
+            email: true,
+            isApproved: true
+          }
+        }
+      }
+    })
+
+    if (!profile || profile.status !== ProfileStatus.APPROVED || !profile.user.isApproved) {
+      throw new NotFoundException('Profile not found')
+    }
+
+    return this.mapProfile(profile)
+  }
+
   async updateProfile(userId: string, dto: UpdateProfileDto): Promise<ProfileResponse> {
     const existing = await this.prisma.profile.findUnique({
       where: { userId },
       include: {
         theme: true,
+        category: true,
         user: {
           select: {
             id: true,
@@ -101,7 +161,7 @@ export class ProfilesService {
       throw new NotFoundException('Profile not found')
     }
 
-  const data: Prisma.ProfileUpdateInput = {}
+    const data: Prisma.ProfileUpdateInput = {}
 
     if (dto.displayName !== undefined) {
       data.displayName = dto.displayName
@@ -156,6 +216,7 @@ export class ProfilesService {
       data,
       include: {
         theme: true,
+        category: true,
         user: {
           select: {
             id: true,
@@ -212,7 +273,8 @@ export class ProfilesService {
         enquiries30d: 0
       },
       createdAt: profile.createdAt,
-      updatedAt: profile.updatedAt
+      updatedAt: profile.updatedAt,
+      category: profile.category?.name ?? 'General'
     }
   }
 
@@ -224,8 +286,14 @@ export class ProfilesService {
   }
 
   async adminList(statusFilter?: string): Promise<AdminProfileDto[]> {
-    const where: Prisma.ProfileWhereInput = {}
-    
+    const where: Prisma.ProfileWhereInput = {
+      user: {
+        role: {
+          not: 'SUPER_ADMIN'
+        }
+      }
+    }
+
     if (statusFilter && Object.values(ProfileStatus).includes(statusFilter as ProfileStatus)) {
       where.status = statusFilter as ProfileStatus
     }
